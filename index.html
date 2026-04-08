@@ -13,8 +13,512 @@
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <!-- External Stylesheet -->
-    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background: #0b0e17;
+        color: #eef5ff;
+        scroll-behavior: smooth;
+        line-height: 1.5;
+        overflow-x: hidden;
+      }
+
+      .bg-glow {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 20% 30%, #0f172a, #03050b);
+        z-index: -2;
+      }
+      .bg-glow::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle at 80% 70%,
+          rgba(59, 130, 246, 0.15),
+          transparent 60%
+        );
+        z-index: -1;
+      }
+
+      .container {
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 0 1rem;
+        }
+      }
+
+      nav {
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(12px);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid rgba(71, 125, 255, 0.2);
+        padding: 0.8rem 0;
+      }
+
+      .nav-flex {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+
+      .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(125deg, #a5f3fc, #3b82f6);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        letter-spacing: -0.02em;
+      }
+
+      .menu-toggle {
+        display: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: #93c5fd;
+        background: none;
+        border: none;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+        transition: all 0.3s ease;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        font-weight: 500;
+        color: #cbd5f0;
+        transition: 0.2s;
+        font-size: 0.95rem;
+      }
+
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: #60a5fa;
+        text-shadow: 0 0 6px rgba(96, 165, 250, 0.4);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: linear-gradient(95deg, #2563eb, #3b82f6);
+        color: white;
+        padding: 0.6rem 1.5rem;
+        border-radius: 40px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.25s ease;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        white-space: nowrap;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 1.5px solid #3b82f6;
+        color: #93c5fd;
+        box-shadow: none;
+      }
+
+      .btn-outline:hover {
+        background: #1e3a8a40;
+        border-color: #60a5fa;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .btn-sm {
+        padding: 0.35rem 1rem;
+        font-size: 0.75rem;
+        gap: 0.4rem;
+      }
+
+      section {
+        padding: 4rem 0;
+      }
+
+      @media (max-width: 768px) {
+        section {
+          padding: 3rem 0;
+        }
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin-bottom: 1.8rem;
+        display: inline-block;
+        background: linear-gradient(135deg, #e0f2fe, #7aa2f7);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        border-left: 4px solid #3b82f6;
+        padding-left: 1rem;
+      }
+
+      @media (max-width: 640px) {
+        .section-title {
+          font-size: 1.5rem;
+          margin-bottom: 1.2rem;
+        }
+      }
+
+      /* Hero */
+      .hero-grid {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 2rem;
+      }
+      .hero-badge {
+        background: rgba(59, 130, 246, 0.2);
+        backdrop-filter: blur(4px);
+        border: 1px solid #3b82f640;
+        display: inline-block;
+        padding: 0.25rem 1rem;
+        border-radius: 40px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        margin-bottom: 1rem;
+        color: #b9d0ff;
+      }
+      .hero-content h1 {
+        font-size: clamp(2rem, 6vw, 3.4rem);
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+      }
+      .gradient-text {
+        background: linear-gradient(to right, #ffffff, #60a5fa);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+      }
+      .hero-desc {
+        font-size: clamp(0.95rem, 4vw, 1.1rem);
+        color: #b9c8f0;
+        max-width: 550px;
+        margin-bottom: 1.5rem;
+      }
+      .stat-bubbles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+      .stat-bubble {
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(8px);
+        padding: 0.6rem 1.2rem;
+        border-radius: 60px;
+        border: 1px solid #3b82f640;
+        text-align: center;
+        flex: 1 0 auto;
+      }
+      .stat-number {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: white;
+      }
+      .hero-card {
+        background: rgba(10, 15, 29, 0.5);
+        backdrop-filter: blur(12px);
+        border-radius: 1.5rem;
+        padding: 1.5rem;
+        border: 1px solid #3b82f640;
+        width: 100%;
+        max-width: 320px;
+        text-align: center;
+        margin: 0 auto;
+      }
+      .hero-card i {
+        font-size: 3rem;
+        color: #3b82f6;
+        margin-bottom: 0.8rem;
+      }
+
+      /* Timeline */
+      .timeline-modern {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+      .timeline-card {
+        background: #0f1622cc;
+        backdrop-filter: blur(4px);
+        border-radius: 1.2rem;
+        padding: 1rem 1.5rem;
+        border: 1px solid #2d3a5e;
+        transition: 0.2s;
+      }
+      .timeline-card h3 {
+        font-size: 1.2rem;
+        margin: 0.3rem 0 0.2rem;
+      }
+
+      /* Projects */
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+      }
+      .project-glass {
+        background: rgba(18, 25, 45, 0.6);
+        backdrop-filter: blur(10px);
+        border-radius: 1.5rem;
+        padding: 1.2rem;
+        border: 1px solid #2d3a60;
+        transition: 0.25s;
+      }
+      .project-icon {
+        font-size: 2rem;
+        color: #60a5fa;
+        margin-bottom: 0.8rem;
+      }
+      .tag {
+        background: #1e2a4a;
+        padding: 0.2rem 0.7rem;
+        border-radius: 20px;
+        font-size: 0.65rem;
+        display: inline-block;
+        margin-right: 0.4rem;
+        margin-bottom: 0.4rem;
+      }
+
+      /* Skills + certificates */
+      .skills-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+        margin-bottom: 2rem;
+      }
+      .skill-chip {
+        background: #111a2c;
+        border-radius: 40px;
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border: 1px solid #2d3a60;
+      }
+      .cert-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.2rem;
+        margin-top: 1rem;
+      }
+      .cert-card {
+        background: #0f1622cc;
+        backdrop-filter: blur(4px);
+        border-radius: 1.2rem;
+        padding: 1rem;
+        border: 1px solid #2d3a5e;
+        display: flex;
+        flex-direction: column;
+        transition: 0.2s;
+      }
+      .cert-card:hover {
+        border-color: #3b82f6;
+        background: #121b2c;
+      }
+      .cert-header {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin-bottom: 0.8rem;
+      }
+      .cert-icon {
+        font-size: 1.8rem;
+        color: #60a5fa;
+      }
+      .cert-details h4 {
+        font-size: 1rem;
+        margin-bottom: 0.2rem;
+      }
+      .cert-date {
+        font-size: 0.65rem;
+        color: #8ca9d4;
+        background: #1e2a46;
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        margin-top: 0.3rem;
+      }
+      .cert-btn {
+        margin-top: 0.8rem;
+        align-self: flex-start;
+      }
+
+      /* About + Contact */
+      .about-glass {
+        background: rgba(12, 18, 30, 0.7);
+        backdrop-filter: blur(12px);
+        border-radius: 1.8rem;
+        padding: 1.5rem;
+        border: 1px solid #2d3a60;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+      }
+      .about-text {
+        flex: 2;
+        min-width: 200px;
+      }
+      .contact-card {
+        background: #0a1020;
+        border-radius: 1.5rem;
+        padding: 1.2rem;
+        flex: 1;
+        min-width: 240px;
+      }
+      /* Email link style */
+      .email-link {
+        color: #93c5fd;
+        text-decoration: none;
+        transition: 0.2s;
+        cursor: pointer;
+        border-bottom: 1px dashed #3b82f6;
+      }
+      .email-link:hover {
+        color: #60a5fa;
+        border-bottom: 1px solid #60a5fa;
+      }
+      input,
+      textarea {
+        background: #0f1628;
+        border: 1px solid #2d3a60;
+        border-radius: 1rem;
+        padding: 0.7rem;
+        width: 100%;
+        color: white;
+        font-family: inherit;
+        font-size: 0.9rem;
+      }
+      footer {
+        text-align: center;
+        padding: 1.5rem;
+        border-top: 1px solid #1e2a44;
+        font-size: 0.8rem;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(8px);
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+      .modal-card {
+        background: #0f172a;
+        border-radius: 1.5rem;
+        max-width: 500px;
+        width: 90%;
+        padding: 1.5rem;
+        border: 1px solid #3b82f6;
+      }
+
+      /* mobile menu */
+      @media (max-width: 820px) {
+        .menu-toggle {
+          display: block;
+        }
+        .nav-links {
+          position: fixed;
+          top: 65px;
+          left: -100%;
+          width: 70%;
+          height: calc(100vh - 65px);
+          background: rgba(10, 15, 30, 0.98);
+          backdrop-filter: blur(16px);
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          padding: 2rem 1rem;
+          gap: 1.8rem;
+          transition: left 0.3s ease;
+          border-right: 1px solid #3b82f640;
+          z-index: 99;
+        }
+        .nav-links.active {
+          left: 0;
+        }
+        .nav-links li {
+          width: 100%;
+          text-align: center;
+        }
+        .nav-links a {
+          font-size: 1.2rem;
+          display: block;
+          padding: 0.5rem;
+        }
+        .nav-flex .btn {
+          display: none;
+        }
+        .mobile-btn {
+          display: inline-block !important;
+        }
+      }
+      @media (min-width: 821px) {
+        .mobile-btn {
+          display: none;
+        }
+        .nav-flex .btn {
+          display: inline-flex;
+        }
+      }
+      .mobile-btn {
+        background: linear-gradient(95deg, #2563eb, #3b82f6);
+        color: white;
+        padding: 0.5rem 1.2rem;
+        border-radius: 40px;
+        font-size: 0.85rem;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      @media (max-width: 480px) {
+        .stat-bubble {
+          padding: 0.4rem 0.8rem;
+        }
+        .stat-number {
+          font-size: 1.2rem;
+        }
+        .btn {
+          padding: 0.5rem 1.2rem;
+          font-size: 0.85rem;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="bg-glow"></div>
@@ -22,9 +526,7 @@
     <nav>
       <div class="container nav-flex">
         <div class="logo">
-          <a href="#home" style="color: #2367d4"
-            >Darshan<span style="color: #3b82f6"> Rathod</span></a
-          >
+          ◈ NOVA<span style="color: #3b82f6">.analytics</span>
         </div>
         <button class="menu-toggle" id="menuToggle" aria-label="Menu">
           <i class="fas fa-bars"></i>
@@ -35,6 +537,13 @@
           <li><a href="#work">Work</a></li>
           <li><a href="#skillset">Skills</a></li>
           <li><a href="#connect">Connect</a></li>
+          <li class="mobile-btn">
+            <a
+              href="#connect"
+              style="color: white; background: transparent; padding: 0"
+              >Let's talk</a
+            >
+          </li>
         </ul>
         <a href="#connect" class="btn"
           ><i class="fas fa-comment-dots"></i> Let's talk</a
@@ -49,7 +558,7 @@
           <div class="hero-content">
             <div class="hero-badge">
               <i class="fas fa-chart-line"></i> Data/Business Intelligence ·
-              Finding insights from data
+              Finding Insights
             </div>
             <h1>
               Turning chaos into <span class="gradient-text">clarity</span
@@ -57,25 +566,21 @@
               with data.
             </h1>
             <p class="hero-desc">
-              I enthusiast about transforming raw data into actionable insights
-              that drive business growth. I have a strong foundation in data
-              visualization, data modelling, data cleaning, documentation, and
-              data storytelling, and I am always eager to learn new tools and
-              techniques to enhance my skills. I am excited to connect with
-              like-minded professionals and explore opportunities to make an
-              impact with data.
+              I am an aspiring data analyst and business analyst with a passion
+              for transforming raw data into actionable insights. With a strong
+              foundation in data analysis, visualization, and business strategy,
+              I am dedicated to helping organizations make informed decisions
+              and drive growth through data-driven solutions.
             </p>
             <div class="stat-bubbles">
               <div class="stat-bubble">
-                <span class="stat-number">7+</span><br />
-                projects completed
+                <span class="stat-number">8+</span><br />Projects completed
               </div>
               <!-- <div class="stat-bubble">
                 <span class="stat-number">99%</span><br />client trust
               </div> -->
               <div class="stat-bubble">
-                <span class="stat-number">7+</span><br />
-                certifications skills
+                <span class="stat-number">7+</span><br />Certified skills
               </div>
             </div>
             <div>
@@ -94,7 +599,8 @@
             <i class="fas fa-brain"></i>
             <h3>AI-Augmented Analytics</h3>
             <p style="font-size: 0.85rem; margin-top: 0.5rem">
-              From raw data to actionable intelligence using BI and AI tools.
+              From raw data to actionable intelligence using modern BI & AI
+              tools.
             </p>
             <div style="margin-top: 0.8rem">
               <i class="fas fa-chart-pie"></i> <i class="fas fa-database"></i>
@@ -110,36 +616,36 @@
           <div class="section-title">
             <i class="fas fa-road"></i> Professional timeline
           </div>
-          <div class="timeline-card">
-            <div class="timeline-date">
-              <i class="far fa-calendar-alt"></i> Feb 2026 - Mar 2026
-            </div>
-            <h3>Data Analyst Intern @Microsoft Elevate</h3>
-            <p>
-              A learning based internship where I worked on a project to analyze
-              the data and provide insights to the management for better
-              decision making.
-            </p>
-            <p style="margin-top: 0.8rem">
-              Internship duration: 1 month (Feb 2026 - Mar 2026).
-            </p>
-            <div
-              style="
-                display: flex;
-                gap: 0.6rem;
-                margin-top: 0.8rem;
-                flex-wrap: wrap;
-              ">
-              <a
-                href="https://drive.google.com/file/d/1e5Us1apeTBt0w2RJit2e7rlQGOcH1Czs/view?usp=sharing"
-                target="_blank"
-                class="btn btn-sm btn-outline">
-                <i class="fas fa-external-link-alt"></i> View Internship
-                Certificate
-              </a>
-            </div>
-          </div>
           <div class="timeline-modern">
+            <div class="timeline-card">
+              <div class="timeline-date">
+                <i class="far fa-calendar-alt"></i> Feb 2026 - Mar 2026
+              </div>
+              <h3>Data Analyst Intern @Microsoft Elevate</h3>
+              <p>
+                A learning based internship where I worked on a project to
+                analyze the data and provide insights to the management for
+                better decision making.
+              </p>
+              <p style="margin-top: 0.8rem">
+                Internship duration: 1 month (Feb 2026 - Mar 2026).
+              </p>
+              <div
+                style="
+                  display: flex;
+                  gap: 0.6rem;
+                  margin-top: 0.8rem;
+                  flex-wrap: wrap;
+                ">
+                <a
+                  href="https://drive.google.com/file/d/1e5Us1apeTBt0w2RJit2e7rlQGOcH1Czs/view?usp=sharing"
+                  target="_blank"
+                  class="btn btn-sm btn-outline">
+                  <i class="fas fa-external-link-alt"></i> View Internship
+                  Certificate
+                </a>
+              </div>
+            </div>
             <div class="timeline-card">
               <div class="timeline-date">
                 <i class="far fa-calendar-alt"></i> Jan 2026 - present
@@ -264,12 +770,13 @@
               <div class="project-icon"><i class="fas fa-chart-line"></i></div>
               <h3>Corn Market Analysis</h3>
               <p>
-                Analyzed corn market trends using Power BI and Google Sheets for data cleaning, creating an
-                interactive dashboard to visualize price fluctuations and
-                forecast future trends.
+                Analyzed corn market trends using Power BI and Google Sheets for
+                data cleaning, creating an interactive dashboard to visualize
+                price fluctuations and forecast future trends.
               </p>
               <div>
-                <span class="tag">Power BI</span><span class="tag">Google Sheets</span>
+                <span class="tag">Power BI</span
+                ><span class="tag">Google Sheets</span>
               </div>
               <button
                 class="btn btn-sm btn-outline view-project"
@@ -282,16 +789,18 @@
               <div class="project-icon"><i class="fas fa-robot"></i></div>
               <h3>Auto Data Cleaning Web Application</h3>
               <p>
-                Developed a web application that automates data cleaning using AI
-                tools, significantly reducing manual effort and improving data
-                quality for analytics projects.
+                Developed a web application that automates data cleaning using
+                AI tools, significantly reducing manual effort and improving
+                data quality for analytics projects.
               </p>
               <div>
-                <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">Numpy</span><span class="tag">Streamlit</span>
+                <span class="tag">Python</span><span class="tag">Pandas</span
+                ><span class="tag">Numpy</span
+                ><span class="tag">Streamlit</span>
               </div>
               <button
                 class="btn btn-sm btn-outline view-project"
-                data-proj="Cleaning"
+                data-proj="cleaning"
                 style="margin-top: 0.8rem">
                 View Details →
               </button>
@@ -518,21 +1027,33 @@
               ✨ Darshan Rathod
             </h2>
             <p>
-              Data analyst & strategist based in Mehsana, Gujarat, India. I help
-              companies unlock hidden patterns, build data cultures, and make
-              metrics-driven decisions.
+              An aspiring data analyst and strategic thinker with a passion for
+              transforming raw data into actionable insights. With a strong
+              foundation in Google Sheets, SQL, and data visualization, I thrive
+              on solving complex business problems and driving informed
+              decision-making. I am eager to contribute my analytical expertise
+              and creative problem-solving skills to a dynamic team where I can
+              continue to grow and make a meaningful impact through data-driven
+              solutions.
             </p>
             <p style="margin-top: 0.8rem">
-              <i class="fas fa-map-marker-alt"></i> Mehsana, Gujarat, India ·
-              Open to remote / Onsite opportunities
+              <i class="fas fa-map-marker-alt"></i> Mehsana, Gujarat, India
+            </p>
+            <p style="margin-top: 0.8rem">
+              <i class="fa fa-briefcase"></i> Available for remote / onsite
+              opportunities anywhere in India.
             </p>
           </div>
           <div class="contact-card">
             <h3><i class="fas fa-paper-plane"></i> Connect with me</h3>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-              <a
-                href="https://github.com/darshan1164"
-                class="btn btn-outline"
+            <div
+              style="
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                margin-top: 1rem;
+              ">
+              <a href="https://github.com/darshan1164" class="btn btn-outline"
                 ><i class="fab fa-github"></i> GitHub</a
               >
               <a
@@ -545,20 +1066,17 @@
                 data-email="darshanrathod1164@gmail.com"
                 ><i class="fas fa-envelope"></i> Email</a
               >
-              <a
-                href="tel:+919512175596"
-                class="btn btn-outline"
+              <a href="tel:+919512175596" class="btn btn-outline"
                 ><i class="fas fa-phone-alt"></i> +91 9512175596</a
               >
             </div>
           </div>
+        </div>
       </section>
     </main>
 
     <footer>
-      <p>
-        © Darshan Rathod - An Aspiring Data Analyst - Fully Responsive Site
-      </p>
+      <p>© Darshan Rathod — Fully Responsive</p>
     </footer>
 
     <!-- Project Modal -->
@@ -580,12 +1098,179 @@
           class="btn btn-sm"
           target="_blank"
           style="margin-top: 0.8rem"
-          >View Project →</a
+          >Explore Full Details →</a
         >
       </div>
     </div>
 
-    <!-- External JavaScript -->
-    <script src="/script.js"></script>
+    <script>
+      // ========== EMAIL REDIRECT FUNCTIONALITY (Gmail) ==========
+      // This function opens Gmail compose window with the recipient's email pre-filled
+      function redirectToGmail(emailAddress) {
+        if (!emailAddress) return;
+        // Using mailto: as fallback, but we explicitly build Gmail compose URL
+        // Gmail's compose URL: https://mail.google.com/mail/?view=cm&fs=1&to=email@example.com
+        const gmailComposeUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(emailAddress)}`;
+        window.open(gmailComposeUrl, "_blank");
+      }
+
+      // Attach click handlers to all elements with class 'email-link' and data-email attribute
+      function setupEmailLinks() {
+        const emailLinks = document.querySelectorAll(".email-link");
+        emailLinks.forEach((link) => {
+          // Remove previous listeners to avoid duplicates
+          const newLink = link.cloneNode(true);
+          link.parentNode.replaceChild(newLink, link);
+          newLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            const email = newLink.getAttribute("data-email");
+            if (email) {
+              redirectToGmail(email);
+            } else {
+              // fallback: if data-email not set, try text content
+              const emailText = newLink.innerText.trim();
+              if (emailText.includes("@")) redirectToGmail(emailText);
+            }
+          });
+        });
+      }
+
+      // Initialize email links when DOM loads
+      document.addEventListener("DOMContentLoaded", () => {
+        setupEmailLinks();
+      });
+
+      // Also re-run after any dynamic content (though none here, but safe)
+      // Mobile menu toggle
+      const menuToggle = document.getElementById("menuToggle");
+      const navLinksEl = document.getElementById("navLinks");
+      if (menuToggle) {
+        menuToggle.addEventListener("click", () =>
+          navLinksEl.classList.toggle("active"),
+        );
+        document
+          .querySelectorAll(".nav-links a")
+          .forEach((link) =>
+            link.addEventListener("click", () =>
+              navLinksEl.classList.remove("active"),
+            ),
+          );
+      }
+
+      // Project data modal
+      const projects = {
+        Hospital: {
+          title: "Hospital Management System BRD",
+          desc: "Busienss requirement document for a hospital management system to streamline operations and improve patient care. Included hospital connectivity, patient management, and streamless communication features.",
+          tech: "Google Docs, Draw.io",
+          link: "https://drive.google.com/file/d/1YTxUjxxAs5k2h7gxEA0SV3iXMXthdIQP/view?usp=drive_link",
+        },
+        Repido: {
+          title: "Women-only Repido Clone App BRD",
+          desc: "Business requirement document for a women-only ride sharing app to provide safe and reliable transportation for women. Included features like driver verification, SOS services, and in-app chat for safety.",
+          tech: "Google Docs, Draw.io",
+          link: "https://drive.google.com/file/d/1af90AMWz-l9wPqohTq-ceK3dVspRS2Wi/view?usp=drive_link",
+        },
+        marketing: {
+          title: "Corn Market Analysis",
+          desc: "Analyzed corn market trends using Power BI and Google Sheets for data cleaning, creating an interactive dashboard to visualize price fluctuations and forecast future trends. Identified key factors influencing price changes and provided actionable insights for stakeholders.",
+          tech: "Power BI, Google Sheets",
+          link: "https://github.com/darshan1164/Corn_Market_Analysis",
+        },
+        cleaning: {
+          title: "Data Cleaning Pipeline",
+          desc: "Developed automated data cleaning pipeline using Python and Pandas. Processed 100k records/minute with 99.5% accuracy. Reduced manual data cleaning time by 80%.",
+          tech: "Python, Pandas, NumPy, Streamlit",
+          link: "https://github.com/darshan1164/AutoDataCleaning",
+        },
+      };
+      const modal = document.getElementById("projectModal");
+      const closeModal = document.getElementById("closeModalBtn");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalDesc = document.getElementById("modalDesc");
+      const modalTech = document.getElementById("modalTech");
+      const modalLink = document.getElementById("modalLiveLink");
+      document.querySelectorAll(".view-project").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const key = btn.getAttribute("data-proj");
+          if (key && projects[key]) {
+            modalTitle.innerText = projects[key].title;
+            modalDesc.innerText = projects[key].desc;
+            modalTech.innerText = `Tech stack: ${projects[key].tech}`;
+            modalLink.href = projects[key].link || "#";
+          } else {
+            modalTitle.innerText = "Analytics Project";
+            modalDesc.innerText = "Full case study available upon request.";
+            modalTech.innerText = "Stack: Python, BI, SQL";
+          }
+          modal.style.display = "flex";
+        });
+      });
+      closeModal.onclick = () => (modal.style.display = "none");
+      window.onclick = (e) => {
+        if (e.target === modal) modal.style.display = "none";
+      };
+
+      // active nav + smooth scroll
+      const sections = document.querySelectorAll("section");
+      const navLinkItems = document.querySelectorAll(".nav-links a");
+      function setActive() {
+        let current = "";
+        const scrollPos = window.scrollY + 120;
+        sections.forEach((s) => {
+          if (
+            scrollPos >= s.offsetTop &&
+            scrollPos < s.offsetTop + s.offsetHeight
+          )
+            current = s.getAttribute("id");
+        });
+        navLinkItems.forEach((link) => {
+          link.classList.remove("active");
+          if (link.getAttribute("href").substring(1) === current)
+            link.classList.add("active");
+        });
+      }
+      window.addEventListener("scroll", setActive);
+      window.addEventListener("load", setActive);
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        anchor.addEventListener("click", function (e) {
+          const target = this.getAttribute("href").substring(1);
+          if (target && document.getElementById(target)) {
+            e.preventDefault();
+            document
+              .getElementById(target)
+              .scrollIntoView({ behavior: "smooth" });
+            history.pushState(null, null, `#${target}`);
+          }
+        });
+      });
+
+      // contact form
+      const form = document.getElementById("modernContact");
+      const fb = document.getElementById("modernFeedback");
+      if (form) {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const name = document.getElementById("contactName").value.trim();
+          const email = document.getElementById("contactEmail").value.trim();
+          const msg = document.getElementById("contactMsg").value.trim();
+          if (!name || !email || !msg) {
+            fb.innerHTML = "⚠️ Please fill all fields.";
+            fb.style.color = "#f87171";
+            setTimeout(() => (fb.innerHTML = ""), 2500);
+            return;
+          }
+          if (!email.includes("@")) {
+            fb.innerHTML = "⚠️ Valid email required.";
+            setTimeout(() => (fb.innerHTML = ""), 2000);
+            return;
+          }
+          fb.innerHTML = "✨ Message sent! I'll respond within 24h.";
+          fb.style.color = "#6ee7b7";
+          form.reset();
+          setTimeout(() => (fb.innerHTML = ""), 3000);
+        });
+      }
+    </script>
   </body>
 </html>
